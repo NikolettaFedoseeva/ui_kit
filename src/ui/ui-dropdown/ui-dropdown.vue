@@ -2,7 +2,6 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import type { DropdownOption } from './types'
 
-// #region Props & Emits
 interface Props {
   modelValue?: string | null
   options: DropdownOption[]
@@ -22,29 +21,22 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
   (e: 'select', option: DropdownOption): void
 }>()
-// #endregion Props & Emits
 
-// #region State
 const isOpen = ref(false)
 const dropUp = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
-// #endregion State
 
-// #region Computed
 const selectedOption = computed(() => {
   return props.options.find((opt) => opt.id === props.modelValue) || null
 })
-// #endregion Computed
 
-// #region Functions
 const calculatePosition = () => {
   if (!dropdownRef.value) return
   const rect = dropdownRef.value.getBoundingClientRect()
   const spaceBelow = window.innerHeight - rect.bottom
   const menuHeight = menuRef.value ? menuRef.value.offsetHeight : 220
 
-  // Если места снизу меньше чем высота меню и сверху места достаточно - открываем наверх
   if (spaceBelow < menuHeight && rect.top > menuHeight) {
     dropUp.value = true
   } else {
@@ -92,7 +84,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleScrollOrResize)
   window.removeEventListener('scroll', handleScrollOrResize, true)
 })
-// #endregion Functions
 </script>
 
 <template>
@@ -106,7 +97,7 @@ onBeforeUnmount(() => {
     <div class="ui-dropdown__trigger" @click="toggleDropdown">
       <span v-if="selectedOption" class="ui-dropdown__selected">
         <span v-if="selectedOption.icon" class="ui-dropdown__option-icon">{{ selectedOption.icon }}</span>
-        {{ selectedOption.label }}
+        <span class="ui-dropdown__selected-text">{{ selectedOption.label }}</span>
       </span>
       <span v-else class="ui-dropdown__placeholder">{{ props.placeholder }}</span>
       <span class="ui-dropdown__arrow">▼</span>
@@ -160,31 +151,45 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-card-hover);
     border: 1px solid var(--border-color);
     color: var(--text-main);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     cursor: pointer;
-    backdrop-filter: var(--card-blur);
+    backdrop-filter: blur(10px);
     transition: all 0.2s ease;
+    white-space: nowrap;
 
     &:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-color-glow);
+      border-color: var(--primary);
     }
+  }
+
+  &__selected {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__selected-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &--open &__trigger {
     border-color: var(--primary);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    box-shadow: var(--shadow-glow);
   }
 
   &__arrow {
-    font-size: 0.7rem;
-    opacity: 0.6;
+    font-size: 0.65rem;
+    opacity: 0.7;
+    margin-left: 0.5rem;
     transition: transform 0.2s ease;
   }
 
@@ -198,18 +203,18 @@ onBeforeUnmount(() => {
 
   &__menu {
     position: absolute;
-    left: 0;
     right: 0;
-    z-index: 100;
+    min-width: 220px;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     padding: 0.4rem;
     border-radius: var(--radius-md);
-    background: var(--bg-container);
-    border: 1px solid var(--border-color-glow);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-    backdrop-filter: var(--card-blur);
-    max-height: 220px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(16px);
+    max-height: 260px;
     overflow-y: auto;
 
     &--bottom {
@@ -224,23 +229,23 @@ onBeforeUnmount(() => {
   &__item {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.65rem 0.85rem;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
     border-radius: var(--radius-sm);
     color: var(--text-main);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
 
     &:hover:not(&--disabled):not(&--selected) {
-      background: var(--secondary);
-      color: var(--text-main);
+      background: var(--bg-card-hover);
+      color: var(--primary);
     }
 
     &--selected {
-      background: var(--btn-primary-bg, var(--primary-gradient));
-      color: var(--btn-primary-text, var(--text-inverse));
+      background: var(--primary-gradient);
+      color: #ffffff !important;
     }
 
     &--disabled {
