@@ -1,4 +1,4 @@
-export interface TabItem {
+export type TabItem = {
   id: string
   label: string
   icon?: string
