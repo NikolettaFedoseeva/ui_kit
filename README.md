@@ -8,14 +8,14 @@
 
 ### Из Git-репозитория:
 `ash
-npm install git+https://github.com/your-username/lern-ui-kit.git#main
+npm install git+https://github.com/NikolettaFedoseeva/ui_kit.git
 `
 
 ### При локальной разработке (Local file linking):
 Добавьте в package.json вашего подпроекта:
 `json
 "dependencies": {
-  "lern-ui-kit": "file:../lern_ui_kit"
+  "lern-ui-kit": "git+https://github.com/NikolettaFedoseeva/ui_kit.git"
 }
 `
 Затем выполните:
