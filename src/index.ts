@@ -1,15 +1,2 @@
 export * from './ui'
 export * from './lib/theme'
-
-// Explicit type re-exports for TypeScript IDE model resolution
-export type { QuestionData } from './ui/interactive-flashcard/types'
-export type { QuestionOption } from './ui/ui-question/types'
-export type { TabItem } from './ui/ui-tabs/types'
-export type { DropdownOption } from './ui/ui-dropdown/types'
-export type { TableColumn } from './ui/ui-table/types'
-export type { BadgeVariant } from './ui/ui-badge/types'
-export type { ButtonVariant, ButtonSize } from './ui/ui-button/types'
-export type { CardVariant } from './ui/ui-card/types'
-export type { AlertVariant } from './ui/ui-alert/types'
-export type { AvatarStatus, AvatarSize } from './ui/ui-avatar/types'
-export type { ProgressBarVariant, ProgressBarSize } from './ui/ui-progress-bar/types'
